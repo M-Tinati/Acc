@@ -43,12 +43,29 @@ class RoznameJournal {
     }
 }
 
+function determineAccountType(accountName) {
+    const debitAccounts = ['نقد', 'بانک', 'حسابهای دریافتنی', 'موجودی مواد و کالا'];
+    const creditAccounts = ['حسابهای پرداختنی', 'وام', 'درآمد', 'سرمایه'];
+
+    if (debitAccounts.includes(accountName)) {
+        return 'بدهکار';
+    } else if (creditAccounts.includes(accountName)) {
+        return 'بستانکار';
+    } else {
+        alert('نام حساب نامعتبر است.');
+        return null;
+    }
+}
+
 function addEntry() {
     const date = document.getElementById('date').value;
     const description = document.getElementById('description').value;
-    const accountType = document.getElementById('accountType').value;
     const accountName = document.getElementById('accountName').value;
     const amount = parseFloat(document.getElementById('amount').value);
+    
+    const accountType = determineAccountType(accountName);
+    if (!accountType) return;
+
     const debitAccount = accountType === 'بدهکار' ? accountName : '';
     const creditAccount = accountType === 'بدهکار' ? '' : accountName;
     const entry = new RoznameEntry(date, description, debitAccount, creditAccount, accountType === 'بدهکار' ? amount : 0, accountType === 'بستانکار' ? amount : 0);
